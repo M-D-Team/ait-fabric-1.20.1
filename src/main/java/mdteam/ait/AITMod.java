@@ -5,7 +5,7 @@ import com.neptunedevelopmentteam.neptunelib.core.itemgroup.NeptuneItemGroup;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import mc.craig.software.regen.util.Platform;
-import mdteam.ait.api.tardis.TardisEvents;
+import mdteam.ait.api.tardis    .TardisEvents;
 import mdteam.ait.compat.DependencyChecker;
 import mdteam.ait.compat.immersive.PortalsHandler;
 import mdteam.ait.compat.regen.RegenHandler;
@@ -200,7 +200,7 @@ public class AITMod implements ModInitializer {
 
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
             DesktopRegistry.syncToClient(handler.getPlayer());
-            ServerTardisManager.getInstance().addSubscriberToAll(handler.getPlayer());
+            // ServerTardisManager.getInstance().addSubscriberToAll(handler.getPlayer());
         });
 
         AIT_ITEM_GROUP.initialize();

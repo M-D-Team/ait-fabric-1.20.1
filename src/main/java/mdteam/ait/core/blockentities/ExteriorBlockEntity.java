@@ -41,8 +41,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.UUID;
 
-import static mdteam.ait.tardis.TardisTravel.State.FLIGHT;
-import static mdteam.ait.tardis.TardisTravel.State.MAT;
+import static mdteam.ait.tardis.TardisTravel.State.*;
 import static mdteam.ait.tardis.util.TardisUtil.findTardisByPosition;
 import static mdteam.ait.tardis.util.TardisUtil.isClient;
 
@@ -111,8 +110,8 @@ public class ExteriorBlockEntity extends BlockEntity implements BlockEntityTicke
         if (nbt.contains("tardis")) {
             this.tardisId = UUID.fromString(nbt.getString("tardis"));
         }
-        if (this.getAnimation() != null)
-            this.getAnimation().setAlpha(nbt.getFloat("alpha"));
+        //if (this.getAnimation() != null)
+        //    this.getAnimation().setAlpha(nbt.getFloat("alpha"));
         if(this.getTardis() != null)
             this.getTardis().markDirty();
     }
@@ -155,7 +154,7 @@ public class ExteriorBlockEntity extends BlockEntity implements BlockEntityTicke
 
     @Override
     public void tick(World world, BlockPos pos, BlockState blockState, ExteriorBlockEntity blockEntity) {
-        if (this.animation != null)
+        if (this.animation != null && this.getTardis().getTravel().getState() != LANDED)
             this.getAnimation().tick();
 
         if(world.isClient()) {
