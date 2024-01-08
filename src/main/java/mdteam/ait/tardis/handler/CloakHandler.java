@@ -19,7 +19,7 @@ public class CloakHandler extends TardisLink {
     /*private float alphaBasedOnDistance = 1.0F;*/
 
     public CloakHandler(UUID tardisId) {
-        super(tardisId);
+        super(tardisId, "cloak");
     }
 
     public void enable() {

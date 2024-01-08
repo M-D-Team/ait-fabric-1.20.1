@@ -17,7 +17,7 @@ public class FlightHandler extends TardisLink {
     private int targetTicks = 0;
 
     public FlightHandler(UUID tardisId) {
-        super(tardisId);
+        super(tardisId, "flight");
 
         // todo this doesnt seem to work.
         TardisEvents.LANDED.register((tardis -> {

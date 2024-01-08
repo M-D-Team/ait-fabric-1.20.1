@@ -20,7 +20,7 @@ import java.util.UUID;
 public class HADSHandler extends TardisLink {
 
     public HADSHandler(UUID tardisID) {
-        super(tardisID);
+        super(tardisID, "hads");
     }
 
     public boolean isHADSActive() {

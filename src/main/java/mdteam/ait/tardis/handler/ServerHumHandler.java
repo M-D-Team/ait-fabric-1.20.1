@@ -22,7 +22,7 @@ public class ServerHumHandler extends TardisLink {
     public static final Identifier RECEIVE = new Identifier(AITMod.MOD_ID, "receive_hum");
     private HumSound current;
     public ServerHumHandler(UUID tardisId) {
-        super(tardisId);
+        super(tardisId, "hum");
     }
 
     public HumSound getHum() {

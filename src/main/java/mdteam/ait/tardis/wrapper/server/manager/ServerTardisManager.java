@@ -2,14 +2,11 @@ package mdteam.ait.tardis.wrapper.server.manager;
 
 import com.google.gson.GsonBuilder;
 import mdteam.ait.AITMod;
+import mdteam.ait.tardis.*;
 import mdteam.ait.tardis.exterior.ExteriorSchema;
 import mdteam.ait.tardis.util.TardisUtil;
 import mdteam.ait.tardis.util.AbsoluteBlockPos;
 import mdteam.ait.tardis.util.SerialDimension;
-import mdteam.ait.tardis.Tardis;
-import mdteam.ait.tardis.TardisDesktopSchema;
-import mdteam.ait.tardis.TardisManager;
-import mdteam.ait.tardis.TardisTravel;
 import mdteam.ait.tardis.variant.exterior.ExteriorVariantSchema;
 import mdteam.ait.tardis.wrapper.client.manager.ClientTardisManager;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -49,7 +46,6 @@ public class ServerTardisManager extends TardisManager {
                     if (player == null) return;
                     addSubscriberToTardis(player, uuid);
                     this.sendTardis(player, uuid);
-
                 }
         );
 
@@ -310,6 +306,19 @@ public class ServerTardisManager extends TardisManager {
             this.sendTardis(player, tardis);
         }
     }
+    public void sendToSubscribers(TardisSyncable syncable) {
+        if (syncable == null) return;
+        if (!this.subscribers.containsKey(syncable.tardis().getUuid())) return;
+        MinecraftServer mc = TardisUtil.getServer();
+
+        Map<UUID, List<UUID>> subscribersCopy = new HashMap<>(this.subscribers);
+        List<UUID> tardisSubscribers = new CopyOnWriteArrayList<>(subscribersCopy.getOrDefault(syncable.tardis().getUuid(), Collections.emptyList()));
+
+        for (UUID uuid : tardisSubscribers) {
+            ServerPlayerEntity player = mc.getPlayerManager().getPlayer(uuid);
+            this.sendSyncable(player, syncable);
+        }
+    }
 
     public void addSubscriberToAll(ServerPlayerEntity player) {
         for (Tardis tardis : this.lookup.values()) {
@@ -344,6 +353,16 @@ public class ServerTardisManager extends TardisManager {
         data.writeString(json);
 
         ServerPlayNetworking.send(player, SEND, data);
+    }
+
+    private void sendSyncable(ServerPlayerEntity player, TardisSyncable syncable) {
+        PacketByteBuf buf = PacketByteBufs.create();
+
+        buf.writeUuid(syncable.tardis().getUuid());
+        buf.writeString(syncable.getHeader());
+        buf.writeString(gson.toJson(syncable));
+
+        ServerPlayNetworking.send(player, UPDATE, buf);
     }
 
     @Override

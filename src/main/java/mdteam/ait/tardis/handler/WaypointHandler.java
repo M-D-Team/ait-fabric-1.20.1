@@ -16,7 +16,7 @@ public class WaypointHandler extends TardisLink {
     private boolean hasCartridge;
 
     public WaypointHandler(UUID tardisId) {
-        super(tardisId);
+        super(tardisId, "waypoint");
     }
 
     public boolean hasCartridge() {

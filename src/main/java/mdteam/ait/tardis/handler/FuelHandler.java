@@ -19,7 +19,7 @@ public class FuelHandler extends TardisLink {
     public static final String REFUELING = "refueling";
 
     public FuelHandler(UUID tardisId) {
-        super(tardisId);
+        super(tardisId, "fuel");
     }
 
     public double getFuel() {

@@ -20,7 +20,7 @@ public class OvergrownHandler extends TardisLink {
     private static Random random;
 
     public OvergrownHandler(UUID tardisId) {
-        super(tardisId);
+        super(tardisId, "overgrown");
     }
 
     public int getTicks() {

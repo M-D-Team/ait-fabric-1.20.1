@@ -9,11 +9,11 @@ import mdteam.ait.client.sounds.ClientSoundManager;
 import mdteam.ait.core.blockentities.ConsoleBlockEntity;
 import mdteam.ait.core.blockentities.DoorBlockEntity;
 import mdteam.ait.core.blockentities.ExteriorBlockEntity;
+import mdteam.ait.tardis.*;
 import mdteam.ait.tardis.util.TardisUtil;
 import mdteam.ait.tardis.util.SerialDimension;
+import mdteam.ait.tardis.wrapper.client.ClientTardisExterior;
 import mdteam.ait.tardis.wrapper.server.manager.ServerTardisManager;
-import mdteam.ait.tardis.Tardis;
-import mdteam.ait.tardis.TardisManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -50,12 +50,7 @@ public class ClientTardisManager extends TardisManager {
 
             ClientPlayNetworking.registerGlobalReceiver(ServerTardisManager.UPDATE,
                     (client, handler, buf, responseSender) -> {
-                        UUID uuid = buf.readUuid();
-
-                        if (!this.lookup.containsKey(uuid))
-                            return;
-
-                        this.sync(uuid, buf);
+                        this.update(buf);
                     });
 
             ClientTickEvents.END_WORLD_TICK.register(world -> {
@@ -73,6 +68,28 @@ public class ClientTardisManager extends TardisManager {
             });
 
             ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> this.reset());
+        }
+    }
+
+    private void update(PacketByteBuf buf) {
+        UUID uuid = buf.readUuid();
+
+        if (!this.lookup.containsKey(uuid)) {
+            this.getTardis(uuid, t -> {});
+            return;
+        }
+
+        ClientTardis tardis = (ClientTardis) this.lookup.get(uuid);
+        String header = buf.readString();
+        String json = buf.readString();
+
+        this.update(tardis,header,json);
+    }
+    private void update(ClientTardis tardis, String header, String json) {
+        // there gotta be a better way bro
+        switch (header) {
+            case "travel" -> tardis.setTravel(this.gson.fromJson(json, TardisTravel.class));
+            case "desktop" -> tardis.setDesktop(this.gson.fromJson(json, TardisDesktop.class));
         }
     }
 
@@ -113,7 +130,6 @@ public class ClientTardisManager extends TardisManager {
     private void sync(PacketByteBuf buf) {
         this.sync(buf.readUuid(), buf);
     }
-
 
     // https://discord.com/channels/859856751070937098/863115541166424124/1179521521555865852
     public void ask(BlockPos pos) {

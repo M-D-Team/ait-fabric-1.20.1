@@ -10,7 +10,7 @@ public class LoyaltyHandler extends TardisLink { // todo currently will be usele
     private HashMap<UUID, Loyalty> data;
 
     public LoyaltyHandler(UUID tardisId, HashMap<UUID, Loyalty> data) {
-        super(tardisId);
+        super(tardisId, "loyalty");
         this.data = data;
     }
 

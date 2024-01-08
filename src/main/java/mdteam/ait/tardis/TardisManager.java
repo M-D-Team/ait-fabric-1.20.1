@@ -19,6 +19,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.world.World;
 
 import java.io.Console;
 import java.util.HashMap;
@@ -83,6 +84,13 @@ public abstract class TardisManager {
     public static TardisManager getInstance() {
 //        return FabricLauncherBase.getLauncher().getEnvironmentType() == EnvType.SERVER ? ServerTardisManager.getInstance() : ClientTardisManager.getInstance();
         return TardisUtil.isServer() ? ServerTardisManager.getInstance() : ClientTardisManager.getInstance();
+    }
+
+    public static TardisManager getInstance(boolean isServer) {
+        return isServer ? ServerTardisManager.getInstance() : ClientTardisManager.getInstance();
+    }
+    public static TardisManager getInstance(World world) {
+        return getInstance(!world.isClient());
     }
 
     public void getTardis(UUID uuid, Consumer<Tardis> consumer) {

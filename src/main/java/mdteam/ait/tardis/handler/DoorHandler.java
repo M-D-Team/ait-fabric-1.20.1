@@ -37,7 +37,7 @@ public class DoorHandler extends TardisLink {
     public DoorStateEnum tempInteriorState;
 
     public DoorHandler(UUID tardis) {
-        super(tardis);
+        super(tardis, "door");
     }
 
     @Override

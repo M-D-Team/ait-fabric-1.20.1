@@ -14,7 +14,7 @@ import java.util.UUID;
 
 public class SiegeModeHandler extends TardisLink {
     public SiegeModeHandler(UUID tardisId) {
-        super(tardisId);
+        super(tardisId, "siege");
     }
 
     public boolean isSiegeMode() {

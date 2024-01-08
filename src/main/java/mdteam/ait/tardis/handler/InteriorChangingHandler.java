@@ -25,7 +25,7 @@ public class InteriorChangingHandler extends TardisLink {
     private static Random random;
 
     public InteriorChangingHandler(UUID tardisId) {
-        super(tardisId);
+        super(tardisId, "interior_changing");
     }
 
     private void setGenerating(boolean var) {

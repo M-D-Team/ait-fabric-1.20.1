@@ -17,7 +17,7 @@ public class ServerAlarmHandler extends TardisLink {
     private int soundCounter = 0; // decides when to start the next cloister sound
 
     public ServerAlarmHandler(UUID tardisId) {
-        super(tardisId);
+        super(tardisId, "alarm");
     }
 
     public void enable() {

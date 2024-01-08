@@ -31,7 +31,7 @@ public class TardisHandlersManager extends TardisLink {
     // private final SequenceHandler sequence;
 
     public TardisHandlersManager(UUID tardisId) {
-        super(tardisId);
+        super(tardisId, "handlers");
 
         this.door = new DoorHandler(tardisId);
         this.properties = new PropertiesHolder(tardisId);

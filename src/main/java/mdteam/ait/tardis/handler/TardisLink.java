@@ -1,28 +1,41 @@
 package mdteam.ait.tardis.handler;
 
-import mdteam.ait.tardis.Exclude;
+import mdteam.ait.tardis.*;
 import mdteam.ait.tardis.util.TardisUtil;
 import mdteam.ait.tardis.util.AbsoluteBlockPos;
 import mdteam.ait.tardis.util.SerialDimension;
 import mdteam.ait.tardis.wrapper.client.manager.ClientTardisManager;
 import mdteam.ait.tardis.wrapper.server.manager.ServerTardisManager;
-import mdteam.ait.tardis.Tardis;
-import mdteam.ait.tardis.TardisTickable;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.UUID;
 
 // todo rename all "Handler" to "Data" - eg FuelHander -> FuelData, makes more sense, no?
-public abstract class TardisLink implements TardisTickable {
+public abstract class TardisLink extends TardisSyncable implements TardisTickable {
 
     protected UUID tardisId;
+    protected final String header;
 
-    public TardisLink(UUID tardisId) {
+    public TardisLink(UUID tardisId, String header) {
         this.tardisId = tardisId;
+        this.header = header;
+    }
+
+    @Override
+    public String getHeader() {
+        return this.header;
+    }
+
+    @Override
+    public void updateTardis(World world) {
+        if (world.isClient()) return;
+
+        ServerTardisManager.getInstance().sendToSubscribers(this);
     }
 
     public Tardis tardis() {
